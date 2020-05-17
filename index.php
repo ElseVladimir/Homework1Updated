@@ -14,91 +14,37 @@ session_start();
 		<h1 style="margin-left:25%;">Домашнее задание:список товаров(updated)</h1>
 		<select name="operation" class="" required>
 
-			<option value="uah">uah</option>
-			<option value="usd">usd</option>
-			<option value="eur">eur</option>
-			
+            <?php foreach($currency as $currKey => $curr) :?>
+                <option value="<?=$currKey;?>"><?=$curr['name'];?></option>
+			<?php endforeach; ?>
+
 		</select>
 	<input type="submit" name="submit" value="Результат" class="" /><br/>
-<?php
-	if($_POST['submit'] && $_POST['operation'] == 'usd')
-{
-?>
-		<table>
-		<tr>
-			<th>Имя</th>
-			<th>Цена</th>
-			<th>Валюта</th>
-		</tr>
-	<?php foreach($products as $product) :?>
-		<tr>
-			<td><?=$product['name'];?></td>
-			<td><?=round($product['price'] / $_SESSION[1]['course'], 2);?></td>
-			<td><?=$_SESSION[1]['name'];?></td>
-		</tr>
-	<?php endforeach;?>
-	</table>	
-<?php
-}
-	else if($_POST['submit'] && $_POST['operation'] == 'eur')
-{
-?>
-		<table>
-		<tr>
-			<th>Имя</th>
-			<th>Цена</th>
-			<th>Валюта</th>
-		</tr>
-	<?php foreach($products as $product) :?>
-		<tr>
-			<td><?=$product['name'];?></td>
-			<td><?=round($product['price'] / $_SESSION[2]['course'], 2);?></td>
-			<td><?=$_SESSION[2]['name'];?></td>
-		</tr>
-	<?php endforeach;?>
-	</table>	
-<?php
-}
-	elseif($_POST['submit'] && $_POST['operation'] == 'uah')
-{
-?>
-		<table>
-		<tr>
-			<th>Имя</th>
-			<th>Цена</th>
-			<th>Валюта</th>
-		</tr>
-	<?php foreach($products as $product) :?>
-		<tr>
-			<td><?=$product['name'];?></td>
-			<td><?=round($product['price'] / $_SESSION[0]['course'], 2);?></td>
-			<td><?=$_SESSION[0]['name'];?></td>
-		</tr>
-	<?php endforeach;?>
-	</table>	
-<?php
-}
-	else if(!isset($_POST['submit']))
-{
-?>
-		<table>
-		<tr>
-			<th>Имя</th>
-			<th>Цена</th>
-			<th>Валюта</th>
-		</tr>
-	<?php foreach($products as $product) :?>
-		<tr>
-			<td><?=$product['name'];?></td>
-			<td></td>
-			<td></td>
-		</tr>
-	<?php endforeach;?>
-	</table>	
-<?php
-}
-?>
 	</form>
+
+    <table>
+        <tr>
+            <th>Имя</th>
+            <th>Цена</th>
+            <th>Валюта</th>
+        </tr>
+        <?php print_r($_POST);?>
+        <?php $operation = $_POST['operation'];?>
+        <?php foreach($products as $productKey => $product) :?>
+            <?php if(!empty($_POST['submit'])):?>
+                    <tr>
+                        <td><?=$product['name'];?></td>
+                        <td><?=round($product['price'] / $_SESSION[$operation]['course'], 2);?></td>
+                        <td><?=$_SESSION[$operation]['name'];?></td>
+                    </tr>
+                <?php else: ?>
+                    <tr>
+                        <td><?=$product['name'];?></td>
+                    </tr>
+            <?php endif;?>
+        <?php endforeach;?>
+    </table>
+
 <h3>Переделаланная версия, что сделано:</h3>
 	<ul>
 		<li>Переделал альтернативный синтаксис для вывода(echo);</li>
